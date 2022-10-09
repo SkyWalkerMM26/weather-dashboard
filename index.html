@@ -4,16 +4,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/style.css">
+    <title>Document</title>
 </head>
 <body>
-    <h1>hello</h1>
-    <form id="search">
-        <label for="city">City Name:</label><br>
-        <input type="text" id="city" name="city" value="San Mateo"><br>
-        <input type="submit" value="Submit">
-      </form>
+    <header class="col-12">Weather Dashboard</header>
+    <div class="container">
+        <div class="row row justify-content-between">
+          <div class="col-3 bg-warning">
+            <form id="search">
+                <label for="city">Search for a City:</label><br>
+                <input type="text" id="city" name="city"><br>
+                <input type="submit" value="Submit">
+            </form>
+          </div>
+          <div class="col-9 bg-primary">
+            <section class="col-12">hello</section>
+            
+           
+            <section class="col-12 bg-primary bg-warning">5-Day Forecast:
+                <div class="row">
+                <div class="col bg-success" id="day-1">test</div>
+                <div class="col bg-success" id="day-2">test</div>
+                <div class="col bg-success" id="day-3">test</div>
+                <div class="col bg-success" id="day-4">test</div>
+                <div class="col bg-success" id="day-5">test</div>
+            </section>
+            </div>
+            </div>
+            </div>
+           
+        </div>
+    </div>
     <script src="./assets/script.js"></script>
 </body>
 </html>

@@ -1,9 +1,8 @@
-console.log("linked")
 var citySearchButton = document.getElementById('search')
 console.log(citySearchButton)
 function geoCodeApi(searchTerm){
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a'
-    var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+ geocodeKey
+    var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     console.log(url)
     fetch(url).then(function(response,error){
         console.log(response)
@@ -27,11 +26,9 @@ function weatherApi(lat,lon){
     console.log(lat)
     console.log(lon)
     var apiKey = "aa3ac1aee36fc947283c79786b233621"
-    var url = 'https://api.openweathermap.org/data/3.0/onecall?lat='+lat +'&lon=' +lon+'&exclude={part}&appid=' +apiKey
+    var url = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey
     fetch(url)
-
-
-}
+                                            }
 
 function getValue(event){
     event.preventDefault()
@@ -44,5 +41,5 @@ function getValue(event){
 citySearchButton.addEventListener('submit', getValue)
 
 
-//geoCodeApi()
+// geoCodeApi()
 

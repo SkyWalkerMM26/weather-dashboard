@@ -16,6 +16,8 @@
 
 var citySearchButton = document.getElementById('search');
 var daysForecast = document.querySelector('#daysForecast');
+var cities = ["San Francisco", "San Jose", "San Mateo", "Berkeley", "Antioch"]
+
 function geoCodeApi(searchTerm){
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a'
     var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
@@ -35,12 +37,13 @@ function geoCodeApi(searchTerm){
         var lon = data[0].lon
         weatherApi(lat,lon)
     })
+ 
 }
 
 function weatherApi(lat,lon){
     console.log("WE'RE IN THE WEATHER API CALL")
-    console.log(lat)
-    console.log(lon)
+    console.log(lat);
+    console.log(lon);
     var apiKey = "aa3ac1aee36fc947283c79786b233621"
     var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
     fetch(url).then(function(response, error){
@@ -54,12 +57,16 @@ function weatherApi(lat,lon){
         var listDays = [0, 8 ,16 ,24 ,32]
         for (var i = 0; i < listDays.length; i++){
             var daysList = document.createElement("div");
+            daysList.className = "weatherInfo";
             console.log(data.list[listDays[i]].main.humidity);
             var p1 = document.createElement("p");
             var p2 = document.createElement("p");
             var p3 = document.createElement("p");
             var p4 = document.createElement("p");
             var p5 = document.createElement("p");
+            p1.className = "dayContent";
+            p2.className = "dayContent";
+            p3.className = "dayContent";
             p1.textContent = data.list[listDays[i]].main.humidity;
             p2.textContent = data.list[listDays[i]].main.temp;
             p3.textContent = data.list[listDays[i]].wind.speed;
@@ -69,6 +76,18 @@ function weatherApi(lat,lon){
             daysList.appendChild(p3);
             
             daysForecast.appendChild(daysList);
+        }
+        function storeContent (){
+            var key = $("#city").val()
+            var value =$(".dayContent").input()
+            localStorage.setItem(key, value);
+        }
+        storeContent();
+
+        function resetSubmit (){
+            citySearchButton.addEventListener('submit', getValue)
+            console.log(getValue);
+            getValue = "";
         }
     })
 }
@@ -84,8 +103,10 @@ function getValue(event){
 citySearchButton.addEventListener('submit', getValue)
 
 
-var searchHistory = JSON.parse(localStorage.getItem("searchHistory"))
-var searchLength = searchHistory.length;
-var lastSearch = searchHistory[searchLength-1]
-geoCodeApi(lastSearch)
+
+
+var search = JSON.parse(localStorage.getItem("searchHistory"));
+var searchLength = ("searchHistory.length");
+var lastSearch =(searchLength -1)
+// geoCodeApi()
 

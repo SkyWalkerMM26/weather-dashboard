@@ -27,6 +27,7 @@ var futureData = document.getElementById("futureWeatherData");
 
 
 function geoCodeApi(searchTerm){
+    console.log(searchTerm)
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a'
     var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     console.log(url)
@@ -71,37 +72,24 @@ function weatherApi(lat,lon){
         weatherImage.appendTo(WeatherCard);
         document.getElementById("future").textContent = "5 Day Forecast:"
         futureData.innerHTML = "";
-        
+        for (var i = 0; i < 5; i++){
+            var col = document.createElement("div");
+            col.setAttribute("class", "col");
+            var cards = document.createElement("div");
+            cards.setAttribute("class", "card");
+            var cardBody = document.createElement("div");
+            cardBody.setAttribute("class", "card-body");
+            var h4 = document.createElement("h4").textContent = moment.unix(weatherData.daily[i].dt).format("MM//DD/YYYY");
+            var newImageIcon = weatherData.daily[i].weatehr[0].icon;
+            var icon = document.createElement("img");
+            icon.setAttribute("src", "https://openweathermap.org/img/w/" + newImageIcon + ".png");
+
+        }
+
 
     })
 }
 
-//         for (var i = 0; i < listDays.length; i++){
-//             var we = document.createElement("div");
-//             daysList.className = "card-body";
-//             console.log(data.list[listDays[i]].main.humidity);
-//             p1.textContent = data.list[listDays[i]].main.humidity;
-//             p2.textContent = data.list[listDays[i]].main.temp;
-//             p3.textContent = data.list[listDays[i]].wind.speed;
-        
-//             daysList.appendChild(p1);
-//             daysList.appendChild(p2);
-//             daysList.appendChild(p3);
-            
-//             daysForecast.appendChild(daysList);
-//         }
-//         function storeContent (){
-//             var value = $("#city").val()
-//             var key = $("#city").val()
-//             window.localStorage.setItem("searchHistory", value);
-//         }
-//         storeContent();
-
-//         // if (localStorage.key >= 6 ){
-//         //     console.clear()
-//         // }
-//     })
-// }
 
 function getValue(event){
     event.preventDefault()

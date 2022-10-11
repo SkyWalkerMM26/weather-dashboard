@@ -19,7 +19,8 @@ var citySearchButton = document.getElementById('searchCitybtn');
 var clearHistorybtn = document.getElementById("clearHistorybtn");
 var historyCity = document.getElementById("container");
 var blockDataWeather = document.getElementById("presentWeather");
-var weatherCard = document.getElementById("cardHeader");
+var mainCard = document.getElementById('block-card')
+var weatherCard = document.getElementById("card-header");
 var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
@@ -27,13 +28,31 @@ var futureData = document.getElementById("futureWeatherData");
 var historySearch = JSON.parse(localStorage.getItem("searchHistoryList"))||[];
 var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
 var apiKey = "aa3ac1aee36fc947283c79786b233621";
+var currentlySearchedCity;
 
+function createMainCard(data){
+    console.log(data)
+    var weatherIcon = data.weather[0].icon;
+    temp.textContent = "Temperature: " + data.main.temp + " F";
+    wind.textContent = "Wind Speed: " + data.wind.speed + " MPH";
+    humidity.textContent = "Humidity: " + data.main.humidity + " %";
+    
+    var headerDate = moment.unix(data.dt).format("MM/DD/YYYY");
+    weatherCard.textContent = currentlySearchedCity + "" + headerDate;
+    var weatherImage = $("<img>");
+    weatherImage.attr("src", "https://openweathermap.org/img/w/" + weatherIcon + ".png");
+    console.log(weatherImage[0])
+    mainCard.append(weatherImage[0]);
+    document.getElementById("future").textContent = "5 Day Forecast:"
+    futureData.innerHTML = "";
+}
 
 function geoCodeApi(searchTerm){
+    console.log("int he geocode API function!")
     console.log(searchTerm)
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
     var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
-    console.log(url)
+    // console.log(url)
     fetch(url).then(function(response,error){
         console.log(response)
         if(!response.ok){
@@ -42,37 +61,33 @@ function geoCodeApi(searchTerm){
         return response.json()
     }).then(function(data){
         console.log(data);
-        console.log(data[0]);
+        // console.log(data[0]);
         var lat = data[0].lat;
         console.log(lat);
         var lon = data[0].lon;
         console.log(lon)
-        getValue()
+        getWeatherApi(lat, lon)
+        
     })
 }
-  
+function getWeatherApi(lat,lon){
     var apiKey = "aa3ac1aee36fc947283c79786b233621";
-    var url = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey
+    var url = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey+"&units=imperial"
     fetch(url).then(function(response, error){
         console.log(response)
         if(!response.ok){
             console.log("error")
         }
-        return outcome.json()
-    }).then(function(weatherData){
-        console.log(weatherData)
-        var weatherIcon = weatherData.current.weather[0].icon;
-        temp.textContent = "Temperature: " + weatherData.current.temp + " F";
-        wind.textContent = "Wind Speed: " + weatherData.current.wind_speed + " MPH";
-        humidity.textContent = "Humidity: " + weatherData.current.humidity + " %";
-
-        var headerDate = moment.unix(data.current.dt).format("MM/DD/YYYY");
-        weatherCard.textContent = city + "" + headerDate;
-        var weatherImage = $("<img>");
-        weatherImage.attr("src", "https://openweathermap.org/img/w/" + weatherIcon + ".png");
-        weatherImage.appendTo(WeatherCard);
-        document.getElementById("future").textContent = "5 Day Forecast:"
-        futureData.innerHTML = "";
+        return response.json()
+    }).then(function(data){
+        console.log(data)
+        data = data.list
+        console.log(data)
+        createMainCard(data[0])
+        var fiveDayArray = [data[6],data[12],data[18],data[24], data[30]]
+        console.log(fiveDayArray)
+        return
+        createFutureCards(fiveDayArray)
         for (var i = 0; i < 5; i++){
             var col = document.createElement("div");
             col.setAttribute("class", "col");
@@ -115,17 +130,24 @@ function geoCodeApi(searchTerm){
 
 
     })
-
+}
 function getValue(event){
     event.preventDefault()
+    // console.log(event.target)
+    if(event.target.id === "search"){
+        var city = document.getElementById('city').value
+        currentlySearchedCity = city
+        geoCodeApi(city)
+        //add it to local storage
+        return
+    }
     console.log(event.target)
-    var city = document.getElementById('city').value
-    console.log(city.value)
-    geoCodeApi(city.value)
+    currentlySearchedCity = ""
+    // figuring out if the search is from past history searches
 }
 
 
-citySearchButton.addEventListener('click', getValue)
+searchCityForm.addEventListener('submit', getValue)
 
 
 // }
@@ -134,5 +156,3 @@ citySearchButton.addEventListener('click', getValue)
 // // var lastSearch =(searchLength -1)
 // // // geoCodeApi()
     
-    
-geoCodeApi()

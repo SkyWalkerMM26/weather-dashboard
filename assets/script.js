@@ -25,11 +25,13 @@ var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var futureData = document.getElementById("futureWeatherData");
 var historySearch = JSON.parse(localStorage.getItem("searchHistoryList"))||[];
+var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
+var apiKey = "aa3ac1aee36fc947283c79786b233621";
 
 
 function geoCodeApi(searchTerm){
     console.log(searchTerm)
-    var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a'
+    var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
     var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     console.log(url)
     fetch(url).then(function(response,error){
@@ -39,35 +41,33 @@ function geoCodeApi(searchTerm){
         }
         return response.json()
     }).then(function(data){
-        console.log(data)
-        console.log(data[0])
-        var lat = data[0].lat
-        console.log(lat)
-        var lon = data[0].lon
-        weatherApi(lat,lon)
+        console.log(data);
+        console.log(data[0]);
+        var lat = data[0].lat;
+        console.log(lat);
+        var lon = data[0].lon;
+        console.log(lon)
+        getValue()
     })
- 
 }
-function weatherApi(lat,lon){
-    console.log(lat);
-    console.log(lon);
-    var apiKey = "aa3ac1aee36fc947283c79786b233621"
-    var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
+  
+    var apiKey = "aa3ac1aee36fc947283c79786b233621";
+    var url = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey
     fetch(url).then(function(response, error){
         console.log(response)
         if(!response.ok){
             console.log("error")
         }
-        return response.json()
-    }).then(function(data){
-        console.log(data)
-        var weatherIcon = data.current.weather[0].icon;
-        temp.textContent = "Temperature: " + data.current.temp + " F";
-        wind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
-        humidity.textContent = "Humidity: " + data.current.humidity + " %";
+        return outcome.json()
+    }).then(function(weatherData){
+        console.log(weatherData)
+        var weatherIcon = weatherData.current.weather[0].icon;
+        temp.textContent = "Temperature: " + weatherData.current.temp + " F";
+        wind.textContent = "Wind Speed: " + weatherData.current.wind_speed + " MPH";
+        humidity.textContent = "Humidity: " + weatherData.current.humidity + " %";
 
         var headerDate = moment.unix(data.current.dt).format("MM/DD/YYYY");
-        weatherCard.textContent = city + "" + date;
+        weatherCard.textContent = city + "" + headerDate;
         var weatherImage = $("<img>");
         weatherImage.attr("src", "https://openweathermap.org/img/w/" + weatherIcon + ".png");
         weatherImage.appendTo(WeatherCard);
@@ -98,7 +98,7 @@ function weatherApi(lat,lon){
             weatherApi(city)
         })
         
-        searchCityForm/addEventListener("submit", function(event){
+        citySearchButton.addEventListener("click", function(event){
             event.preventDefault();
             blockDataWeather.classList.remove("weather");
             blockDataWeather.style.display = "block";
@@ -113,20 +113,19 @@ function weatherApi(lat,lon){
             historySearch = [];
         })
 
-        
+
     })
+
+function getValue(event){
+    event.preventDefault()
+    console.log(event.target)
+    var city = document.getElementById('city').value
+    console.log(city.value)
+    geoCodeApi(city.value)
 }
 
-// function getValue(event){
-//     event.preventDefault()
-//     console.log(event.target)
-//     var city = document.getElementById('city')
-//     console.log(city.value)
-//     geoCodeApi(city.value)
-// }
 
-
-// citySearchButton.addEventListener('submit', getValue)
+citySearchButton.addEventListener('click', getValue)
 
 
 // }
@@ -134,5 +133,6 @@ function weatherApi(lat,lon){
 // // var searchLength = ("searchHistory.length");
 // // var lastSearch =(searchLength -1)
 // // // geoCodeApi()
-
     
+    
+geoCodeApi()

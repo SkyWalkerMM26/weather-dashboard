@@ -13,10 +13,15 @@
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
+var searchCityForm = document.getElementById("search");
+var inputCity = document.getElementById("city");
+var citySearchButton = document.getElementById('searchCitybtn');
+var weatherCard = document.getElementById("cardHeader");
+var temp = document.getElementById("temp");
+var wind = document.getElementById("wind");
+var humidity = document.getElementById("humidity");
 
-var citySearchButton = document.getElementById('search');
-var daysForecast = document.querySelector('#daysForecast');
-var cities = ["San Francisco", "San Jose", "San Mateo", "Berkeley", "Antioch"]
+
 
 function geoCodeApi(searchTerm){
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a'

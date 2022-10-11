@@ -31,7 +31,6 @@ function geoCodeApi(searchTerm){
     }).then(function(data){
         console.log(data)
         console.log(data[0])
-        console.log("We're in the GEOCODE API")
         var lat = data[0].lat
         console.log(lat)
         var lon = data[0].lon
@@ -39,7 +38,6 @@ function geoCodeApi(searchTerm){
     })
  
 }
-
 function weatherApi(lat,lon){
     console.log("WE'RE IN THE WEATHER API CALL")
     console.log(lat);
@@ -57,7 +55,7 @@ function weatherApi(lat,lon){
         var listDays = [0, 8 ,16 ,24 ,32]
         for (var i = 0; i < listDays.length; i++){
             var daysList = document.createElement("div");
-            daysList.className = "weatherInfo";
+            daysList.className = "card-body";
             console.log(data.list[listDays[i]].main.humidity);
             var p1 = document.createElement("p");
             var p2 = document.createElement("p");
@@ -78,17 +76,15 @@ function weatherApi(lat,lon){
             daysForecast.appendChild(daysList);
         }
         function storeContent (){
+            var value = $("#city").val()
             var key = $("#city").val()
-            var value =$(".dayContent").input()
-            localStorage.setItem(key, value);
+            window.localStorage.setItem("searchHistory", value);
         }
         storeContent();
 
-        function resetSubmit (){
-            citySearchButton.addEventListener('submit', getValue)
-            console.log(getValue);
-            getValue = "";
-        }
+        // if (localStorage.key >= 6 ){
+        //     console.clear()
+        // }
     })
 }
 
@@ -105,8 +101,8 @@ citySearchButton.addEventListener('submit', getValue)
 
 
 
-var search = JSON.parse(localStorage.getItem("searchHistory"));
-var searchLength = ("searchHistory.length");
-var lastSearch =(searchLength -1)
-// geoCodeApi()
+// var search = JSON.parse(localStorage.getItem("searchHistory"));
+// var searchLength = ("searchHistory.length");
+// var lastSearch =(searchLength -1)
+// // geoCodeApi()
 

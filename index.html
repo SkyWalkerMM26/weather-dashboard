@@ -9,23 +9,27 @@
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <header class="col-12">Weather Dashboard</header>
-    <div class="container">
-        <div class="row row justify-content-between">
-          <div class="col-3 bg-warning">
+    <header>Weather Dashboard</header>
+   
+        <div class="row">
+          <div class="col-sm-3 bg-warning">
             <form id="search">
-                <label for="city">Search for a City:</label><br>
+                <h1 for="city">Search for a City:</h1><br>
                 <input type="text" id="city" name="city"><br>
-                <input type="submit" value="Submit">
+                <button id="searchCitybtn">Search</button>
             </form>
-          </div>
-          <div class="col-9 bg-primary">
+            <h2 class="search">Search History:</h2>
+            <button id="clearHistorybtn">Clear</button>
+            <div class="col" id="searchHistory">
+                <div class="container" id="container"></div>
+            </div>
+          </div>  
+          <div class="col-9 bg-primary" id="cityWeatherData">
             <section class="col-12">hello</section>
+                <div class="blockCard"></div>
+                    
             
-           
-            <section class="col-12 bg-primary bg-warning">5-Day Forecast:
-                <div class="row" id="daysForecast"></div>
-             
+        
             </section>
             
             </div>

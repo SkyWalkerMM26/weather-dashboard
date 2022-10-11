@@ -16,11 +16,14 @@
 var searchCityForm = document.getElementById("search");
 var inputCity = document.getElementById("city");
 var citySearchButton = document.getElementById('searchCitybtn');
+var clearHistorybtn = document.getElementById("clearHistorybtn");
+var historyCity = document.getElementById("container");
+var blockDataWeather = document.getElementById("presentWeather");
 var weatherCard = document.getElementById("cardHeader");
 var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
-
+var futureData = document.getElementById("futureWeatherData");
 
 
 function geoCodeApi(searchTerm){
@@ -44,11 +47,10 @@ function geoCodeApi(searchTerm){
  
 }
 function weatherApi(lat,lon){
-    console.log("WE'RE IN THE WEATHER API CALL")
     console.log(lat);
     console.log(lon);
     var apiKey = "aa3ac1aee36fc947283c79786b233621"
-    var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
     fetch(url).then(function(response, error){
         console.log(response)
         if(!response.ok){
@@ -57,41 +59,49 @@ function weatherApi(lat,lon){
         return response.json()
     }).then(function(data){
         console.log(data)
-        var listDays = [0, 8 ,16 ,24 ,32]
-        for (var i = 0; i < listDays.length; i++){
-            var daysList = document.createElement("div");
-            daysList.className = "card-body";
-            console.log(data.list[listDays[i]].main.humidity);
-            var p1 = document.createElement("p");
-            var p2 = document.createElement("p");
-            var p3 = document.createElement("p");
-            var p4 = document.createElement("p");
-            var p5 = document.createElement("p");
-            p1.className = "dayContent";
-            p2.className = "dayContent";
-            p3.className = "dayContent";
-            p1.textContent = data.list[listDays[i]].main.humidity;
-            p2.textContent = data.list[listDays[i]].main.temp;
-            p3.textContent = data.list[listDays[i]].wind.speed;
-        
-            daysList.appendChild(p1);
-            daysList.appendChild(p2);
-            daysList.appendChild(p3);
-            
-            daysForecast.appendChild(daysList);
-        }
-        function storeContent (){
-            var value = $("#city").val()
-            var key = $("#city").val()
-            window.localStorage.setItem("searchHistory", value);
-        }
-        storeContent();
+        var weatherIcon = data.current.weather[0].icon;
+        temp.textContent = "Temperature: " + data.current.temp + " F";
+        wind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
+        humidity.textContent = "Humidity: " + data.current.humidity + " %";
 
-        // if (localStorage.key >= 6 ){
-        //     console.clear()
-        // }
+        var headerDate = moment.unix(data.current.dt).format("MM/DD/YYYY");
+        weatherCard.textContent = city + "" + date;
+        var weatherImage = $("<img>");
+        weatherImage.attr("src", "https://openweathermap.org/img/w/" + weatherIcon + ".png");
+        weatherImage.appendTo(WeatherCard);
+        document.getElementById("future").textContent = "5 Day Forecast:"
+        futureData.innerHTML = "";
+        
+
     })
 }
+
+//         for (var i = 0; i < listDays.length; i++){
+//             var we = document.createElement("div");
+//             daysList.className = "card-body";
+//             console.log(data.list[listDays[i]].main.humidity);
+//             p1.textContent = data.list[listDays[i]].main.humidity;
+//             p2.textContent = data.list[listDays[i]].main.temp;
+//             p3.textContent = data.list[listDays[i]].wind.speed;
+        
+//             daysList.appendChild(p1);
+//             daysList.appendChild(p2);
+//             daysList.appendChild(p3);
+            
+//             daysForecast.appendChild(daysList);
+//         }
+//         function storeContent (){
+//             var value = $("#city").val()
+//             var key = $("#city").val()
+//             window.localStorage.setItem("searchHistory", value);
+//         }
+//         storeContent();
+
+//         // if (localStorage.key >= 6 ){
+//         //     console.clear()
+//         // }
+//     })
+// }
 
 function getValue(event){
     event.preventDefault()
@@ -106,8 +116,9 @@ citySearchButton.addEventListener('submit', getValue)
 
 
 
-// var search = JSON.parse(localStorage.getItem("searchHistory"));
-// var searchLength = ("searchHistory.length");
-// var lastSearch =(searchLength -1)
-// // geoCodeApi()
+// // var search = JSON.parse(localStorage.getItem("searchHistory"));
+// // var searchLength = ("searchHistory.length");
+// // var lastSearch =(searchLength -1)
+// // // geoCodeApi()
 
+    

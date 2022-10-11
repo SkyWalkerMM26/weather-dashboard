@@ -51,7 +51,7 @@ function geoCodeApi(searchTerm){
     console.log("int he geocode API function!")
     console.log(searchTerm)
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
-    var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
+    var url = 'https://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     // console.log(url)
     fetch(url).then(function(response,error){
         console.log(response)
@@ -72,7 +72,7 @@ function geoCodeApi(searchTerm){
 }
 function getWeatherApi(lat,lon){
     var apiKey = "aa3ac1aee36fc947283c79786b233621";
-    var url = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey+"&units=imperial"
+    var url = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey+"&units=imperial"
     fetch(url).then(function(response, error){
         console.log(response)
         if(!response.ok){

@@ -24,6 +24,7 @@ var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var futureData = document.getElementById("futureWeatherData");
+var historySearch = JSON.parse(localStorage.getItem("searchHistoryList"))||[];
 
 
 function geoCodeApi(searchTerm){
@@ -51,7 +52,7 @@ function weatherApi(lat,lon){
     console.log(lat);
     console.log(lon);
     var apiKey = "aa3ac1aee36fc947283c79786b233621"
-    var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
     fetch(url).then(function(response, error){
         console.log(response)
         if(!response.ok){
@@ -80,30 +81,55 @@ function weatherApi(lat,lon){
             var cardBody = document.createElement("div");
             cardBody.setAttribute("class", "card-body");
             var h4 = document.createElement("h4").textContent = moment.unix(weatherData.daily[i].dt).format("MM//DD/YYYY");
-            var newImageIcon = weatherData.daily[i].weatehr[0].icon;
+            var newImageIcon = data.daily[i].weather[0].icon;
             var icon = document.createElement("img");
             icon.setAttribute("src", "https://openweathermap.org/img/w/" + newImageIcon + ".png");
-
+            var newTemp = document.createElement("p").textContent = "temp: " + data.daily[i].temp.day + "F";
+            var newHumidity = document.createElement("p").textContent = "Humid: " + data.daily[i].humidity + "%";
+            cardBody.append(h4, icon, newTemp, newHumidity);
+            cards.append(cardBody);
+            col.append(cards);
+            futureData.append(col);
         }
 
+        historyCity.addEventListener("click", function(clearData) {
+            console.log(clearData);
+            var city = e.target.getAttribute("data-city");
+            weatherApi(city)
+        })
+        
+        searchCityForm/addEventListener("submit", function(event){
+            event.preventDefault();
+            blockDataWeather.classList.remove("weather");
+            blockDataWeather.style.display = "block";
+            var city = document.getElementById("city").value;
+            saveSearch(city);
+            weatherApi(city)
+;        })
+        
+        clearHistorybtn.addEventListener("click", function(){
+            localStorage.removeItem("searchHistoryList");
+            historyCity.innerHTML ="";
+            historySearch = [];
+        })
 
+        
     })
 }
 
-
-function getValue(event){
-    event.preventDefault()
-    console.log(event.target)
-    var city = document.getElementById('city')
-    console.log(city.value)
-    geoCodeApi(city.value)
-}
-
-citySearchButton.addEventListener('submit', getValue)
+// function getValue(event){
+//     event.preventDefault()
+//     console.log(event.target)
+//     var city = document.getElementById('city')
+//     console.log(city.value)
+//     geoCodeApi(city.value)
+// }
 
 
+// citySearchButton.addEventListener('submit', getValue)
 
 
+// }
 // // var search = JSON.parse(localStorage.getItem("searchHistory"));
 // // var searchLength = ("searchHistory.length");
 // // var lastSearch =(searchLength -1)

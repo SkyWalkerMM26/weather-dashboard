@@ -3,16 +3,19 @@
 // Insert a form with a submit button on the page.
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
-// Fetch and then the oneweathermap url to get the location and weather data.
+// Fetch and then the oneweathermap url to get the location.
 // Console log the data that was retrieve from fetch.then to view the information retrieve from fetch.
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed
-// 
-// WHEN I view future weather conditions for that city
+// Create section and use moment.format to show the proper format date.
+// WHEN I view future weather conditions for that city.
 // THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
+// Create cards to show the five days weather that was retrieved from fetch. 
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
+// click a button to remove the recent submission then display the current search.
 
+//these are the set variables referring to the index.html
 var searchCityForm = document.getElementById("search");
 var inputCity = document.getElementById("city");
 var citySearchButton = document.getElementById('searchCitybtn');
@@ -30,6 +33,8 @@ var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
 var apiKey = "aa3ac1aee36fc947283c79786b233621";
 var container = document.getElementById("container");
 
+
+//this function gets the data and image to input into the cards.
 function createMainCard(data){
     console.log(data)
     var weatherIcon = data.weather[0].icon;
@@ -47,6 +52,7 @@ function createMainCard(data){
     futureData.innerHTML = "";
 }
 
+//this fxn use the geocode api to get lat and lon of the city of interest.
 function geoCodeApi(searchTerm){
     console.log("in the geocode API function!")
     console.log(searchTerm)
@@ -70,6 +76,8 @@ function geoCodeApi(searchTerm){
         
     })
 }
+
+// this fxn fetch the data from the one weather API then we create divs, assign it a class. Since we have to have 5 data points, do it with a for loop.
 function getWeatherApi(lat,lon){
     var apiKey = "aa3ac1aee36fc947283c79786b233621";
     var url = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey+"&units=imperial"
@@ -84,12 +92,9 @@ function getWeatherApi(lat,lon){
         data = data.list
         console.log(data)
         createMainCard(data[0])
-        // var fiveDayArray = [data[6],data[12],data[18],data[24], data[30]]
-        // console.log(fiveDayArray)
-        // return
-        // createFutureCards(fiveDayArray)
+   
         for (var i = 0; i < 5; i++){
-            // console.log(fiveDayArray[i]);
+           
             var col = document.createElement("div");
             col.setAttribute("class", "col");
             var cards = document.createElement("div");
@@ -126,27 +131,28 @@ function getWeatherApi(lat,lon){
 ;        })
         
         clearHistorybtn.addEventListener("click", function(){
-            localStorage.removeItem("searchHistoryList");
-            historyCity.innerHTML ="";
-            historySearch = [];
+            console.clear()
         })
 
 
     })
 }
 
+// this is supposed to save data into local storage :(.
 function saveSearch(city){
-    inputCity.push(city);
-    localStorage.setItem("searchHistoryList", JSON.stringify(inputCity));
+    searchTerm.push(city);
+    localStorage.setItem("searchHistoryList", JSON.stringify(searchTerm));
     container.innerHTML = "";
-    for(var i = 0; i , inputCity.length; i++){
+    for(var i = 0; i , searchTerm.length; i++){
         var btn = $("<button>");
-        btn.textContent = inputCity[i];
+        btn.textContent = searchTerm[i];
         btn.classList.add("oldCity");
-        btn.setAttribute("cityData", inputCity[i]);
+        btn.setAttribute("cityData", searchTerm[i]);
         container.append(btn);
         }
 }
+
+// this gets the input from the form when searching from the form and give it to the geoCodeApi fxn.
 function getValue(event){
     event.preventDefault()
     // console.log(event.target)
@@ -168,10 +174,5 @@ function getValue(event){
 searchCityForm.addEventListener('submit', getValue)
 
 
-// }
-// // var search = JSON.parse(localStorage.getItem("searchHistory"));
-// // var searchLength = ("searchHistory.length");
-// // var lastSearch =(searchLength -1)
-// // // geoCodeApi()
-    
+
      

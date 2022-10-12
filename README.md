@@ -10,6 +10,7 @@ Author: Mai Moua
 
 Here is a Weather Dashboard!
 
+<img width="1461" alt="image" src="https://user-images.githubusercontent.com/113512061/195265301-060e4650-e103-4e81-bb37-57514bd9a8b0.png">
 
 **Technologies Used** 
 * HTML5

@@ -57,7 +57,7 @@ function geoCodeApi(searchTerm){
     console.log("in the geocode API function!")
     console.log(searchTerm)
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
-    var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
+    var url = 'https://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     // console.log(url)
     fetch(url).then(function(response,error){
         console.log(response)

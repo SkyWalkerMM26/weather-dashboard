@@ -19,7 +19,7 @@ var citySearchButton = document.getElementById('searchCitybtn');
 var clearHistorybtn = document.getElementById("clearHistorybtn");
 var historyCity = document.getElementById("container");
 var blockDataWeather = document.getElementById("presentWeather");
-var mainCard = document.getElementById('block-card')
+var mainCard = document.getElementById('image-card')
 var weatherCard = document.getElementById("card-header");
 var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
@@ -38,7 +38,7 @@ function createMainCard(data){
     humidity.textContent = "Humidity: " + data.main.humidity + " %";
     
     var headerDate = moment.unix(data.dt).format("MM/DD/YYYY");
-    weatherCard.textContent = currentlySearchedCity + "" + headerDate;
+    weatherCard.textContent = currentlySearchedCity + " " + headerDate;
     var weatherImage = $("<img>");
     weatherImage.attr("src", "https://openweathermap.org/img/w/" + weatherIcon + ".png");
     console.log(weatherImage[0])
@@ -48,10 +48,10 @@ function createMainCard(data){
 }
 
 function geoCodeApi(searchTerm){
-    console.log("int he geocode API function!")
+    console.log("in the geocode API function!")
     console.log(searchTerm)
     var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
-    var url = 'https://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
+    var url = 'http://api.openweathermap.org/geo/1.0/direct?q='+searchTerm+'&limit=5&appid='+geocodeKey
     // console.log(url)
     fetch(url).then(function(response,error){
         console.log(response)
@@ -84,27 +84,30 @@ function getWeatherApi(lat,lon){
         data = data.list
         console.log(data)
         createMainCard(data[0])
-        var fiveDayArray = [data[6],data[12],data[18],data[24], data[30]]
-        console.log(fiveDayArray)
-        return
-        createFutureCards(fiveDayArray)
+        // var fiveDayArray = [data[6],data[12],data[18],data[24], data[30]]
+        // console.log(fiveDayArray)
+        // return
+        // createFutureCards(fiveDayArray)
         for (var i = 0; i < 5; i++){
+            // console.log(fiveDayArray[i]);
             var col = document.createElement("div");
             col.setAttribute("class", "col");
             var cards = document.createElement("div");
             cards.setAttribute("class", "card");
             var cardBody = document.createElement("div");
             cardBody.setAttribute("class", "card-body");
-            var h4 = document.createElement("h4").textContent = moment.unix(weatherData.daily[i].dt).format("MM//DD/YYYY");
-            var newImageIcon = data.daily[i].weather[0].icon;
+            var h4 = document.createElement("h4").textContent = moment.unix(data[i].dt).format("MM//DD/YYYY");
+            var newImageIcon = data[i].weather[0].icon;
             var icon = document.createElement("img");
             icon.setAttribute("src", "https://openweathermap.org/img/w/" + newImageIcon + ".png");
-            var newTemp = document.createElement("p").textContent = "temp: " + data.daily[i].temp.day + "F";
-            var newHumidity = document.createElement("p").textContent = "Humid: " + data.daily[i].humidity + "%";
-            cardBody.append(h4, icon, newTemp, newHumidity);
+            var newTemp = document.createElement("p").textContent = " Temp: " + data[i].main.temp + "F";
+            var newWind = document.createElement("p").textContent = " Wind: " + data[i].wind.speed + "MPH";
+            var newHumidity = document.createElement("p").textContent = " Humid: " + data[i].main.humidity + "% ";
+            cardBody.append(h4, icon, newTemp, newWind, newHumidity);
             cards.append(cardBody);
             col.append(cards);
             futureData.append(col);
+           
         }
 
         historyCity.addEventListener("click", function(clearData) {
@@ -131,6 +134,10 @@ function getWeatherApi(lat,lon){
 
     })
 }
+
+function saveSearch(city){
+    searhH
+}
 function getValue(event){
     event.preventDefault()
     // console.log(event.target)
@@ -139,7 +146,9 @@ function getValue(event){
         currentlySearchedCity = city
         geoCodeApi(city)
         //add it to local storage
+        
         return
+        
     }
     console.log(event.target)
     currentlySearchedCity = ""
@@ -156,3 +165,4 @@ searchCityForm.addEventListener('submit', getValue)
 // // var lastSearch =(searchLength -1)
 // // // geoCodeApi()
     
+     

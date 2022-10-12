@@ -28,7 +28,7 @@ var futureData = document.getElementById("futureWeatherData");
 var historySearch = JSON.parse(localStorage.getItem("searchHistoryList"))||[];
 var geocodeKey = 'f4ac9ae98ce232f81e1a8c7e3fd76a5a';
 var apiKey = "aa3ac1aee36fc947283c79786b233621";
-var currentlySearchedCity;
+var container = document.getElementById("container");
 
 function createMainCard(data){
     console.log(data)
@@ -100,9 +100,9 @@ function getWeatherApi(lat,lon){
             var newImageIcon = data[i].weather[0].icon;
             var icon = document.createElement("img");
             icon.setAttribute("src", "https://openweathermap.org/img/w/" + newImageIcon + ".png");
-            var newTemp = document.createElement("p").textContent = " Temp: " + data[i].main.temp + "F";
-            var newWind = document.createElement("p").textContent = " Wind: " + data[i].wind.speed + "MPH";
-            var newHumidity = document.createElement("p").textContent = " Humid: " + data[i].main.humidity + "% ";
+            var newTemp = document.createElement("p").textContent = "Temp: " + data[i].main.temp + "F\n";
+            var newWind = document.createElement("p").textContent = "Wind: " + data[i].wind.speed + "MPH\n";
+            var newHumidity = document.createElement("p").textContent = "Humid: " + data[i].main.humidity + "%\n";
             cardBody.append(h4, icon, newTemp, newWind, newHumidity);
             cards.append(cardBody);
             col.append(cards);
@@ -113,16 +113,16 @@ function getWeatherApi(lat,lon){
         historyCity.addEventListener("click", function(clearData) {
             console.log(clearData);
             var city = e.target.getAttribute("data-city");
-            weatherApi(city)
+            getWeatherApi(city)
         })
         
-        citySearchButton.addEventListener("click", function(event){
+        searchCityForm.addEventListener("submit", function(event){
             event.preventDefault();
             blockDataWeather.classList.remove("weather");
             blockDataWeather.style.display = "block";
             var city = document.getElementById("city").value;
             saveSearch(city);
-            weatherApi(city)
+            getWeatherApi(city)
 ;        })
         
         clearHistorybtn.addEventListener("click", function(){
@@ -136,7 +136,16 @@ function getWeatherApi(lat,lon){
 }
 
 function saveSearch(city){
-    searhH
+    inputCity.push(city);
+    localStorage.setItem("searchHistoryList", JSON.stringify(inputCity));
+    container.innerHTML = "";
+    for(var i = 0; i , inputCity.length; i++){
+        var btn = $("<button>");
+        btn.textContent = inputCity[i];
+        btn.classList.add("oldCity");
+        btn.setAttribute("cityData", inputCity[i]);
+        container.append(btn);
+        }
 }
 function getValue(event){
     event.preventDefault()
